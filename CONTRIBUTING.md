@@ -42,7 +42,7 @@ Thanks for writing one. A skill is a single `.pbskill` file — a JSON document 
 | `reads` | Any of `memory.search`, `commitments`, `commitments.soon`, `calendar.today`, `weather`, `things_to_try`, `profile`. Add `:N` to size a source (`memory.search:6`). |
 | `card` | `checklist`, `plan_grid` or `ask`. An `ask` card needs `ask.slots` and a `resolve` prompt. |
 | `guards` | Checks Peanut Butter runs on the model's output. See the list below. |
-| `actions` | Any of `add_to_list`, `set_reminder`, `add_thing_to_try`. Each is confirmed by the user. |
+| `actions` | Any of `add_to_list`, `set_reminder`, `add_thing_to_try`. Only for an `ask` card: they are offered as buttons on the confirmation that follows the answer, and each happens only after the user says yes. `set_reminder` shows its button only when a time can be read from the confirmation's title or details. |
 
 ### Prompt variables
 
