@@ -35,3 +35,7 @@ Before you install a skill, Peanut Butter shows who wrote it, what it reads and 
 ## Writing a skill
 
 See [CONTRIBUTING.md](CONTRIBUTING.md). The full format is described in *PB Skill Format v2*.
+
+## Licence
+
+Skills in this repository are shared under the [MIT License](LICENSE).
