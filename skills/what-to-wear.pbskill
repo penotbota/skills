@@ -1,0 +1,39 @@
+{
+  "pbskill": 1,
+  "skill": {
+    "format": 2,
+    "id": "what-to-wear",
+    "name": "What to wear",
+    "version": 1,
+    "author": "Peanut Butter examples",
+    "description": "the user asks what to wear, or whether they need a coat, umbrella or layers today",
+    "triggers": {
+      "phrases": ["what should i wear", "what to wear", "should i wear", "need a coat", "need a jacket", "need an umbrella", "wear today"],
+      "examples": ["What should I wear today?", "Do I need a coat?"],
+      "not": ["I wore that jacket yesterday", "what should i wear to the wedding in june"]
+    },
+    "reads": ["weather", "calendar.today"],
+    "card": "checklist",
+    "guards": ["checklist:strip_brackets", "speech:no_unbacked_claims"],
+    "actions": []
+  },
+  "prompt": "The user asked: \"{{REQUEST}}\"\n\n{{TIME}}\n\nWeather:\n{{WEATHER}}\n\nTheir calendar today:\n{{CALENDAR}}\n\nSuggest what to wear as JSON.\n\"say\": one short sentence to the user about the one thing the weather means for what they wear. Speak to them as \"you\". If a line above says the weather can't be seen, say that plainly and suggest nothing about temperature or rain.\n\"card\": a checklist of 2 to 4 things to wear or bring, the most important first. For each item: \"id\" a short slug, \"text\" the thing in one or two words, \"detail\" at most six words on why, from the weather or the calendar above, \"due\" \"\", \"done\" false.\nKeep every string short — this is read aloud and drawn on a phone.\nUse only the weather and calendar above. Never guess a temperature, rain or an event that isn't written there.",
+  "tests": [
+    {
+      "say": "What should I wear today?",
+      "given": {
+        "weather": { "tempF": 48, "description": "steady rain", "highF": 52, "lowF": 44 },
+        "calendar": [ { "title": "Walk to the office", "at": "08:30" } ]
+      },
+      "expect": { "fires": true, "card": "checklist", "items_min": 2 }
+    },
+    {
+      "say": "Do I need a coat?",
+      "given": {
+        "weather": { "tempF": 86, "description": "clear and sunny" }
+      },
+      "expect": { "fires": true, "card": "checklist", "items_min": 1 }
+    }
+  ],
+  "readme": "Looks at today's weather and your calendar and suggests what to wear or bring. It reads nothing else and can't do anything but show a checklist."
+}
