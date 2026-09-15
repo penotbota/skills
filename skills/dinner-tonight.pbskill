@@ -1,0 +1,77 @@
+{
+  "pbskill": 1,
+  "skill": {
+    "format": 2,
+    "id": "dinner-tonight",
+    "name": "Dinner tonight",
+    "version": 1,
+    "author": "Peanut Butter",
+    "description": "the user asks what to have, cook or make for dinner tonight",
+    "triggers": {
+      "phrases": [
+        "for dinner",
+        "for tea tonight",
+        "dinner ideas",
+        "dinner tonight",
+        "what should we eat",
+        "what should i eat",
+        "what to cook",
+        "should i cook",
+        "should we cook",
+        "what can i make",
+        "what can we make"
+      ],
+      "examples": [
+        "What should we have for dinner?",
+        "Any dinner ideas?",
+        "What can I make tonight?"
+      ],
+      "not": [
+        "We had pasta for dinner last night",
+        "dinner tonight was lovely"
+      ]
+    },
+    "reads": [
+      "memory.search:6"
+    ],
+    "card": "checklist",
+    "guards": [
+      "checklist:strip_brackets",
+      "speech:no_unbacked_claims"
+    ],
+    "actions": []
+  },
+  "prompt": "The user asked: \"{{REQUEST}}\"\n\n{{TIME}}\n\nWhat PB has heard about food, what's at home and what people like, each line marked with when it was said:\n{{QUERY_RESULTS}}\n\nSuggest dinner, as JSON.\n\"say\": one short sentence to the user with the best idea and the reason, from the lines above. Speak to them as \"you\". If nothing above is about food, say PB doesn't know what they have in or what they like, and suggest one or two simple, common dishes — with \"detail\" \"\", and never a word about what is in their kitchen.\n\"card\": a checklist of 2 to 3 dinner ideas, the best first. For each item: \"id\" a short slug, \"text\" a dish in two to four words — always a dish, never a note about what to leave out, \"detail\" at most six words on why — what's in, or who it suits — from the lines above, or \"\" when nothing above gives a reason, \"due\" \"\", \"done\" false.\nKeep every string short — this is read aloud and drawn on a phone.\nNever suggest something a line above says someone dislikes or can't eat, and never claim someone likes something unless a line says so.",
+  "tests": [
+    {
+      "say": "What should we have for dinner?",
+      "given": {
+        "memories": [
+          {
+            "text": "We've got chicken thighs and peppers in the fridge.",
+            "ago": "0d"
+          },
+          {
+            "text": "Ade hates mushrooms, don't put them in anything.",
+            "ago": "5d"
+          }
+        ]
+      },
+      "expect": {
+        "fires": true,
+        "card": "checklist",
+        "items_min": 2
+      }
+    },
+    {
+      "say": "Any dinner ideas?",
+      "given": {},
+      "expect": {
+        "fires": true,
+        "card": "checklist",
+        "items_min": 1
+      }
+    }
+  ],
+  "readme": "Suggests dinner from what you've said about food — what's in, what people like or can't eat. It reads only things you've said, and can't do anything but show a checklist."
+}
