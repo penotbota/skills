@@ -1,0 +1,101 @@
+{
+  "pbskill": 1,
+  "skill": {
+    "format": 2,
+    "id": "weekend-ideas",
+    "name": "Weekend ideas",
+    "version": 1,
+    "author": "Peanut Butter",
+    "description": "the user asks for ideas of what to do this weekend or on a free day, from their Things to try list",
+    "triggers": {
+      "phrases": [
+        "this weekend",
+        "on the weekend",
+        "weekend plans",
+        "weekend ideas",
+        "what should we do",
+        "what can we do",
+        "something to do",
+        "day off",
+        "free day"
+      ],
+      "examples": [
+        "What should we do this weekend?",
+        "Any weekend ideas?",
+        "I've got a day off, what can we do?"
+      ],
+      "not": [
+        "We did nothing this weekend",
+        "what should we do about the leak"
+      ]
+    },
+    "reads": [
+      "things_to_try:12",
+      "weather"
+    ],
+    "card": "checklist",
+    "guards": [
+      "checklist:strip_brackets",
+      "speech:no_unbacked_claims"
+    ],
+    "actions": []
+  },
+  "prompt": "The user asked: \"{{REQUEST}}\"\n\n{{TIME}}\n\nTheir Things to try list, most recently heard first:\n{{THINGS}}\n\nWeather:\n{{WEATHER}}\n\nSuggest things to do, as JSON.\n\"say\": one short sentence to the user with the single best idea and why it suits the weather. Speak to them as \"you\". If the list says nothing is kept yet, say they have nothing on their Things to try list yet and return an empty checklist.\n\"card\": a checklist of up to 4 ideas taken from the list above, the best fit for the weather first — indoors when it is wet or cold. For each item: \"id\" a short slug, \"text\" the thing's name exactly as written in the list, without the kind of thing in brackets, \"detail\" at most six words: who suggested it, or why it suits today, \"due\" \"\", \"done\" false.\nKeep every string short — this is read aloud and drawn on a phone.\nOnly suggest things on the list above. Never add a place, show or activity that is not on it, and never say who suggested something unless the list says so.",
+  "tests": [
+    {
+      "say": "What should we do this weekend?",
+      "given": {
+        "things_to_try": [
+          {
+            "name": "Severance",
+            "category": "show",
+            "suggestedBy": "Mofe"
+          },
+          {
+            "name": "the climbing gym",
+            "category": "activity"
+          },
+          {
+            "name": "Ikoyi",
+            "category": "place"
+          }
+        ],
+        "weather": {
+          "tempF": 46,
+          "description": "heavy rain"
+        }
+      },
+      "expect": {
+        "fires": true,
+        "card": "checklist",
+        "items_min": 1
+      }
+    },
+    {
+      "say": "Any weekend ideas?",
+      "given": {
+        "things_to_try": [
+          {
+            "name": "Hampstead Heath swimming ponds",
+            "category": "place"
+          },
+          {
+            "name": "Piranesi",
+            "category": "book",
+            "suggestedBy": "Sam"
+          }
+        ],
+        "weather": {
+          "tempF": 79,
+          "description": "sunny"
+        }
+      },
+      "expect": {
+        "fires": true,
+        "card": "checklist",
+        "items_min": 1
+      }
+    }
+  ],
+  "readme": "Picks ideas from your Things to try list that suit today's weather. It reads only that list and the weather, and can't do anything but show a checklist."
+}
