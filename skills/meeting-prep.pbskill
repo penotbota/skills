@@ -1,0 +1,101 @@
+{
+  "pbskill": 1,
+  "skill": {
+    "format": 2,
+    "id": "meeting-prep",
+    "name": "Meeting prep",
+    "version": 1,
+    "author": "Peanut Butter",
+    "description": "the user asks to prepare or get ready for a meeting or call today, or what to bring up in it",
+    "triggers": {
+      "phrases": [
+        "prep for",
+        "prepare for",
+        "get ready for",
+        "ready for my meeting",
+        "ready for the meeting",
+        "before my meeting",
+        "before the meeting",
+        "for my meeting",
+        "for the meeting",
+        "meeting prep",
+        "for my call",
+        "before my call",
+        "in the meeting",
+        "in my meeting",
+        "bring up in"
+      ],
+      "examples": [
+        "Help me prep for my meeting",
+        "What should I bring up in the meeting with Sam?",
+        "Get me ready for my call at two"
+      ],
+      "not": [
+        "I was prepared for the worst",
+        "the meeting went fine in the end"
+      ]
+    },
+    "reads": [
+      "calendar.today",
+      "memory.search:5"
+    ],
+    "card": "checklist",
+    "guards": [
+      "checklist:strip_brackets",
+      "speech:no_unbacked_claims"
+    ],
+    "actions": []
+  },
+  "prompt": "The user asked: \"{{REQUEST}}\"\n\n{{TIME}}\n\nTheir calendar today:\n{{CALENDAR}}\n\nWhat PB has heard that may be relevant, each line marked with when it was said:\n{{QUERY_RESULTS}}\n\nHelp them prepare, as JSON.\n\"say\": one short sentence to the user naming the meeting and the one thing most worth having ready. Speak to them as \"you\". If the calendar line says PB cannot see the calendar, say that plainly. If nothing on the calendar matches what they asked about, say you don't see it today.\n\"card\": a checklist of 2 to 4 things to prepare or bring up, the most important first. For each item: \"id\" a short slug, \"text\" the thing to do or raise in a few words, \"detail\" at most six words on why, in your own words from the lines above — never a whole line copied — or \"\", \"due\" the meeting's start time exactly as written in the calendar above, or \"\", \"done\" false.\nKeep every string short — this is read aloud and drawn on a phone.\nUse only what is written above. Never invent a meeting, a person, a number or something that was said.",
+  "tests": [
+    {
+      "say": "Help me prep for my meeting",
+      "given": {
+        "calendar": [
+          {
+            "title": "Budget review with Sam",
+            "at": "14:00"
+          }
+        ],
+        "memories": [
+          {
+            "text": "Sam wants the Q3 numbers before the budget review.",
+            "ago": "2d"
+          },
+          {
+            "text": "We still haven't agreed who owns the marketing spend.",
+            "ago": "1d"
+          }
+        ]
+      },
+      "expect": {
+        "fires": true,
+        "card": "checklist",
+        "items_min": 2
+      }
+    },
+    {
+      "say": "What should I bring up in the meeting with Sam?",
+      "given": {
+        "calendar": [
+          {
+            "title": "1:1 with Sam",
+            "at": "10:30"
+          }
+        ],
+        "memories": [
+          {
+            "text": "Sam said the launch date might slip to November.",
+            "ago": "3d"
+          }
+        ]
+      },
+      "expect": {
+        "fires": true,
+        "card": "checklist",
+        "items_min": 1
+      }
+    }
+  ],
+  "readme": "Looks at today's calendar and what you've said recently and lists what to have ready or bring up. It reads only today's calendar and things you've said, and can't do anything but show a checklist."
+}
