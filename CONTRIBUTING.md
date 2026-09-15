@@ -108,7 +108,7 @@ Fix everything it lists. The same check runs on your pull request.
 
 ## 5. Open a pull request
 
-Add your file under `skills/` and open a pull request. A reviewer looks at whether the skill is useful, whether it reads only what it needs, and whether its prompt is written for a small model. Updates to an existing skill must bump `version`.
+Add your file under `skills/` and open a pull request. By submitting a skill you agree to share it under the [MIT License](LICENSE), so anyone can use and adapt it with attribution. A reviewer looks at whether the skill is useful, whether it reads only what it needs, and whether its prompt is written for a small model. Updates to an existing skill must bump `version`.
 
 ## What gets declined
 
