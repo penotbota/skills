@@ -34,7 +34,7 @@ Before you install a skill, Peanut Butter shows who wrote it, what it reads and 
 
 ## Writing a skill
 
-See [CONTRIBUTING.md](CONTRIBUTING.md). The full format is described in *PB Skill Format v2*.
+The easiest way is [skills.penotbota.com/new](https://skills.penotbota.com/new/): fill in a form, and the page checks the skill as you go with the same rules as the pull request check. From there you can download the file to try on your iPhone, or open the pull request. To write the file by hand, see [CONTRIBUTING.md](CONTRIBUTING.md). The full format is described in *PB Skill Format v2*.
 
 ## Licence
 
