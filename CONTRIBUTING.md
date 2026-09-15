@@ -1,6 +1,8 @@
 # Contributing a skill
 
-Thanks for writing one. A skill is a single `.pbskill` file — a JSON document with the skill's manifest, its prompt, its tests and a short readme. Start from [`skills/what-to-wear.pbskill`](skills/what-to-wear.pbskill).
+Thanks for writing one. A skill is a single `.pbskill` file — a JSON document with the skill's manifest, its prompt, its tests and a short readme.
+
+**The easy way:** [skills.penotbota.com/new](https://skills.penotbota.com/new/) builds the file from a form. It checks as you type with the same rules as step 4, can start from any published skill, and opens the pull request for you. The rest of this guide is for writing the file by hand — start from [`skills/what-to-wear.pbskill`](skills/what-to-wear.pbskill).
 
 ## 1. Write the file
 
