@@ -39,10 +39,11 @@ Thanks for writing one. A skill is a single `.pbskill` file — a JSON document 
 | `triggers.phrases` | Short, lowercase, no apostrophes. A message must contain one before the model is even asked. Be generous — a phrase that fires wrongly costs a quick "no"; one that misses means the skill never runs. |
 | `triggers.examples` | Each must contain one of your phrases. They run as "must fire" tests. |
 | `triggers.not` | Lines that contain a phrase but must not fire. They run as "must not fire" tests. |
-| `reads` | Any of `memory.search`, `commitments`, `commitments.soon`, `calendar.today`, `weather`, `things_to_try`, `profile`. Add `:N` to size a source (`memory.search:6`). |
+| `reads` | Any of `memory.search`, `commitments`, `commitments.soon`, `calendar.today`, `weather`, `things_to_try`, `profile`, `people`, `people.owed`. Add `:N` to size a source (`memory.search:6`). |
+| `errands` | Instead of `reads`: one of `places.search`, `web.search`, `flights.search`. See [Errands](#errands). |
 | `card` | `checklist`, `plan_grid` or `ask`. An `ask` card needs `ask.slots` and a `resolve` prompt. |
 | `guards` | Checks Peanut Butter runs on the model's output. See the list below. |
-| `actions` | Any of `add_to_list`, `set_reminder`, `add_thing_to_try`. Only for an `ask` card: they are offered as buttons on the confirmation that follows the answer, and each happens only after the user says yes. `set_reminder` shows its button only when a time can be read from the confirmation's title or details. |
+| `actions` | Any of `add_to_list`, `set_reminder`, `add_thing_to_try`. Only for an `ask` card: they are offered as buttons on the confirmation that follows the answer, and each happens only after the user says yes. `set_reminder` shows its button only when a time can be read from the confirmation's title or details. `open_link` with `"hosts"` lets a card's rows open those sites, after a tap; an errand skill needs it for its rows to open. |
 
 ### Prompt variables
 
@@ -50,7 +51,7 @@ Your prompt may only use variables its `reads` fill. The validator refuses anyth
 
 | Always | From `reads` |
 |---|---|
-| `{{REQUEST}}` `{{DATE}}` `{{TIME}}` `{{PROFILE}}` `{{USER_NAME}}` | `memory.search` → `{{QUERY_RESULTS}}` · `commitments` / `commitments.soon` → `{{COMMITMENTS}}` · `calendar.today` → `{{CALENDAR}}` · `weather` → `{{WEATHER}}` · `things_to_try` → `{{THINGS}}` |
+| `{{REQUEST}}` `{{DATE}}` `{{TIME}}` `{{PROFILE}}` `{{USER_NAME}}` | `memory.search` → `{{QUERY_RESULTS}}` · `commitments` / `commitments.soon` → `{{COMMITMENTS}}` · `calendar.today` → `{{CALENDAR}}` · `weather` → `{{WEATHER}}` · `things_to_try` → `{{THINGS}}` · `people` / `people.owed` → `{{PEOPLE}}` |
 
 A resolve prompt can also use `{{SLOT}}`, `{{ANSWER}}` and `{{KNOWN}}`.
 
@@ -69,6 +70,19 @@ A resolve prompt can also use `{{SLOT}}`, `{{ANSWER}}` and `{{KNOWN}}`.
 | `speech:no_unbacked_claims` | Drops spoken sentences that offer actions, claim to see, or recall what wasn't given |
 
 Use `speech:no_unbacked_claims` on every skill unless you have a reason not to.
+
+### Errands
+
+An errand is how a skill gets something from outside the phone. The skill doesn't send anything: its prompt writes down the words the user said, Peanut Butter's code keeps only words that were really said, builds the search, sends it, and draws the card and the spoken line from what comes back. What came back is shown, and never handed to the model or saved.
+
+So an errand skill:
+
+- declares no `reads`, and its prompt may use only `{{REQUEST}}`, `{{DATE}}` and `{{TIME}}` — what it is shown could end up in the search
+- uses the `checklist` card, and needs no guards
+- has a prompt that fills fixed fields: `what` and `near` for `places.search`, `look_up` for `web.search`, and from, to, dates, people and cabin for `flights.search`. The builder at [skills.penotbota.com/new](https://skills.penotbota.com/new/) starts you from the prompt Peanut Butter's own skill uses
+- declares `open_link` with the hosts its rows go to: `maps.apple.com` for places, `wikipedia.org` for lookups
+
+What makes one worth writing is when it runs: your trigger phrases and description, for the requests the built-in skills don't catch. See [coffee-run.pbskill](skills/coffee-run.pbskill). Each errand also has to be switched on by the owner, under You › Connectors › Errands; with it off, the skill says so.
 
 ## 2. Write prompts for a small model
 
@@ -94,7 +108,14 @@ Community skills must include at least one test. A test is a request, the sandbo
 }
 ```
 
-`given` can hold `commitments` (`due`: `"-2d"`, `"0d"`, `"+3d"`), `memories` (`ago`: `"3d"`), `things_to_try`, `calendar` (leave it out for "no calendar", `[]` for an empty day) and `weather`. `expect` can check `fires`, `card`, `items`, `items_min`, `speech_mentions` and `speech_not`.
+`given` can hold:
+
+- `commitments` (`due`: `"-2d"`, `"0d"`, `"+3d"`; for `people.owed`, `person` and `"mine": false` when the other person promised it)
+- `memories` (`ago`: `"3d"`), `things_to_try`, `calendar` (leave it out for "no calendar", `[]` for an empty day) and `weather`
+- `people` (`name`, `mentions`, `ago`)
+- for an errand, what it would bring back: `places` (`name`, `metres`), `found` (`title`, `summary`) or `fares` (`airline`, `amount`, `currency`). Leave it out and the search finds nothing — a real answer your skill must handle. A test never reaches the network.
+
+`expect` can check `fires`, `card`, `items`, `items_min`, `speech_mentions` and `speech_not`.
 
 The app runs these on the phone before install. Run the checks below before you open a pull request; the model-based tests run when someone installs your skill.
 
