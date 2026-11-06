@@ -4,7 +4,7 @@
     "format": 2,
     "id": "coffee-run",
     "name": "Coffee run",
-    "version": 1,
+    "version": 2,
     "author": "Peanut Butter",
     "description": "the user asks where they can get a coffee, or wants to go on a coffee run",
     "triggers": {
@@ -66,8 +66,7 @@
       "say": "Coffee run, anywhere close?",
       "given": {},
       "expect": {
-        "fires": true,
-        "card": "checklist"
+        "fires": true
       }
     }
   ],
