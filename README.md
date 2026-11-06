@@ -41,4 +41,6 @@ The easiest way is [skills.penotbota.com/new](https://skills.penotbota.com/new/)
 
 ## Licence
 
-Skills in this repository are shared under the [MIT License](LICENSE).
+The skills in [`skills/`](skills) and the documentation are shared under the [MIT License](LICENSE).
+
+[`tools/pbskill.jar`](tools) is not: it is Neo-2's, and may be run only to check and publish skills. See [tools/LICENSE](tools/LICENSE).
