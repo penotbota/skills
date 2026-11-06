@@ -1,0 +1,75 @@
+{
+  "pbskill": 1,
+  "skill": {
+    "format": 2,
+    "id": "coffee-run",
+    "name": "Coffee run",
+    "version": 1,
+    "author": "Peanut Butter",
+    "description": "the user asks where they can get a coffee, or wants to go on a coffee run",
+    "triggers": {
+      "phrases": [
+        "coffee run",
+        "need a coffee",
+        "need coffee",
+        "grab a coffee",
+        "get a coffee",
+        "for a coffee"
+      ],
+      "examples": [
+        "I need a coffee, where can I go?",
+        "Coffee run, anywhere close?",
+        "Where can I grab a coffee near the library?"
+      ],
+      "not": [
+        "I already had a coffee this morning",
+        "the coffee run was fun yesterday"
+      ]
+    },
+    "card": "checklist",
+    "guards": [],
+    "errands": [
+      "places.search"
+    ],
+    "actions": [
+      {
+        "do": "open_link",
+        "hosts": [
+          "maps.apple.com"
+        ]
+      }
+    ]
+  },
+  "prompt": "The user said: \"{{REQUEST}}\"\n\nWrite down the place they are looking for, using their own words. Do not work anything out and do not add anything. Something they did not mention is an empty string.\n\"what\" the word they used for what they want, usually coffee, \"near\" the area or landmark they named, or an empty string if they only said near them or here.",
+  "tests": [
+    {
+      "say": "I need a coffee, where can I go?",
+      "given": {
+        "places": [
+          {
+            "name": "Bean There",
+            "metres": 300
+          },
+          {
+            "name": "Grind House",
+            "metres": 900
+          }
+        ]
+      },
+      "expect": {
+        "fires": true,
+        "card": "checklist",
+        "items_min": 2
+      }
+    },
+    {
+      "say": "Coffee run, anywhere close?",
+      "given": {},
+      "expect": {
+        "fires": true,
+        "card": "checklist"
+      }
+    }
+  ],
+  "readme": "Finds coffee near you, or near somewhere you name, nearest first. Only the word coffee and the place you named are sent to your phone's map search, with a rough area, and each row opens in Apple Maps. It reads nothing of yours."
+}

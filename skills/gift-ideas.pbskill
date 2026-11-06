@@ -1,0 +1,92 @@
+{
+  "pbskill": 1,
+  "skill": {
+    "format": 2,
+    "id": "gift-ideas",
+    "name": "Gift ideas",
+    "version": 1,
+    "author": "Peanut Butter",
+    "description": "the user asks what to get or give someone as a gift or present, for a birthday or anything else",
+    "triggers": {
+      "phrases": [
+        "gift for",
+        "gift ideas",
+        "present for",
+        "get her",
+        "get him",
+        "get them",
+        "for her birthday",
+        "for his birthday",
+        "for their birthday",
+        "birthday present",
+        "birthday gift"
+      ],
+      "examples": [
+        "What should I get Maya for her birthday?",
+        "Any gift ideas for my dad?",
+        "I need a present for Tom"
+      ],
+      "not": [
+        "Maya loved the present I got her",
+        "the gift for Tom arrived yesterday"
+      ]
+    },
+    "reads": [
+      "calendar.today",
+      "people:8",
+      "memory.search:6"
+    ],
+    "card": "checklist",
+    "guards": [
+      "checklist:strip_brackets",
+      "speech:no_unbacked_claims"
+    ],
+    "actions": []
+  },
+  "prompt": "The user asked: \"{{REQUEST}}\"\n\n{{TIME}}\n\nTheir calendar today:\n{{CALENDAR}}\n\nThe people PB has heard about:\n{{PEOPLE}}\n\nWhat PB has heard that may be relevant, each line marked with when it was said:\n{{QUERY_RESULTS}}\n\nSuggest gifts, as JSON.\n\"say\": one short sentence to the user naming who the gift is for and the best idea, with its reason from the lines above. Speak to them as \"you\". If they did not say who it is for and the calendar shows no birthday today, ask who it is for. If no line above says what that person likes, say PB doesn't know what they like, and suggest one or two ordinary, safe gifts.\n\"card\": a checklist of 2 to 3 gift ideas, the best first. For each item: \"id\" a short slug, \"text\" the gift in two to four words, \"detail\" at most six words on why, from the lines above, or \"\" when nothing above gives a reason, \"due\" \"\", \"done\" false.\nKeep every string short — this is read aloud and drawn on a phone.\nNever say a person likes, wants or needs something unless a line above says so.",
+  "tests": [
+    {
+      "say": "What should I get Maya for her birthday?",
+      "given": {
+        "people": [
+          {
+            "name": "Maya",
+            "mentions": 6,
+            "ago": "1d"
+          }
+        ],
+        "memories": [
+          {
+            "text": "Maya has been getting really into pottery lately.",
+            "ago": "4d"
+          },
+          {
+            "text": "Maya said her favourite mug broke.",
+            "ago": "2d"
+          }
+        ],
+        "calendar": [
+          {
+            "title": "Maya's birthday",
+            "at": "all day"
+          }
+        ]
+      },
+      "expect": {
+        "fires": true,
+        "card": "checklist",
+        "items_min": 2
+      }
+    },
+    {
+      "say": "I need a present for Tom",
+      "given": {},
+      "expect": {
+        "fires": true,
+        "card": "checklist",
+        "items_min": 1
+      }
+    }
+  ],
+  "readme": "Suggests a gift from what you've said about the person, and notices a birthday on today's calendar. It reads today's calendar, the people PB has heard about and things you've said, and can't do anything but show a checklist."
+}
