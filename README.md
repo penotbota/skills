@@ -12,13 +12,16 @@ Peanut Butter hears your household, so a skill written by someone else has to be
 
 A community skill **can**:
 
-- read the sources it declares — things you've said, your task list, today's calendar, today's weather, your Things to try list — and nothing else
+- read the sources it declares — things you've said, your task list, today's calendar, today's weather, your Things to try list, the people Peanut Butter has heard about and what's outstanding with them — and nothing else
+- or, instead of reading anything of yours, ask Peanut Butter to run one of its errands: flight prices, places nearby, or a Wikipedia lookup. Peanut Butter's own code builds the search from the words you said and sends it; the skill never sees an address or a key, and the install screen says exactly what goes out
 - show a checklist, a plan or a question
 - propose one of three actions — add to your list, set a reminder, add to Things to try — which only happen after you say yes
+- link to the sites it names, which open only when you tap
 
 A community skill **cannot**:
 
-- reach the internet or any other app
+- reach the internet itself, or any other app — the only things that leave the phone are an errand's search, sent by Peanut Butter, and a link you tap
+- read anything of yours and run an errand in the same skill, so nothing private can end up in a search
 - run code of its own
 - see anything said in confidence, or a present someone is planning
 - act without your yes

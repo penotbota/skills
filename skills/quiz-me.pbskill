@@ -1,0 +1,66 @@
+{
+  "pbskill": 1,
+  "skill": {
+    "format": 2,
+    "id": "quiz-me",
+    "name": "Quiz me",
+    "version": 1,
+    "author": "Peanut Butter",
+    "description": "the user asks PB to quiz them or play trivia about their own life, family or friends",
+    "triggers": {
+      "phrases": [
+        "quiz me",
+        "quiz us",
+        "trivia",
+        "test me on",
+        "test my memory"
+      ],
+      "examples": [
+        "Quiz me on this week",
+        "Give us some family trivia",
+        "Test my memory about the kids"
+      ],
+      "not": [
+        "I failed the trivia night at the pub",
+        "the quiz us teachers set was hard"
+      ]
+    },
+    "reads": [
+      "memory.search:8"
+    ],
+    "card": "checklist",
+    "guards": [
+      "checklist:strip_brackets",
+      "speech:no_unbacked_claims"
+    ],
+    "actions": []
+  },
+  "prompt": "The user asked: \"{{REQUEST}}\"\n\n{{TIME}}\n\nWhat PB has heard, each line marked with when it was said:\n{{QUERY_RESULTS}}\n\nMake a short quiz from those lines, as JSON.\n\"say\": one short sentence to the user saying how many questions there are and what they are about. Speak to them as \"you\". If there are no lines above, say PB hasn't heard enough yet to make a quiz, and make no questions.\n\"card\": a checklist of 2 to 4 questions, one per line above at most. For each item: \"id\" a short slug, \"text\" the question in under ten words, \"detail\" the answer in a few words, taken from that line, \"due\" \"\", \"done\" false.\nKeep every string short — this is read aloud and drawn on a phone.\nEvery question and answer must come from one line above. Never ask about something no line says.",
+  "tests": [
+    {
+      "say": "Quiz me on this week",
+      "given": {
+        "memories": [
+          {
+            "text": "Ada scored two goals at football on Saturday.",
+            "ago": "3d"
+          },
+          {
+            "text": "We decided to paint the hallway green.",
+            "ago": "2d"
+          },
+          {
+            "text": "Grandma's flight lands on the 20th.",
+            "ago": "1d"
+          }
+        ]
+      },
+      "expect": {
+        "fires": true,
+        "card": "checklist",
+        "items_min": 2
+      }
+    }
+  ],
+  "readme": "Makes a few quiz questions from things you've said, with the answers underneath. Good for family trivia. It reads only things you've said, and can't do anything but show a checklist."
+}
