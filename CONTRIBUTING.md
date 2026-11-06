@@ -117,7 +117,7 @@ Community skills must include at least one test. A test is a request, the sandbo
 
 `expect` can check `fires`, `card`, `items`, `items_min`, `speech_mentions` and `speech_not`.
 
-The app runs these on the phone before install. Run the checks below before you open a pull request; the model-based tests run when someone installs your skill.
+The app runs these on the phone before install. Keep Peanut Butter open while they run: the phone stops the model when the app goes to the background, and the test it was on fails. Run the checks below before you open a pull request; the model-based tests run when someone installs your skill.
 
 ## 4. Check it
 

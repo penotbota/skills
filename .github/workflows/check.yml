@@ -1,8 +1,9 @@
 name: Check skills
 
 on:
+  # Every pull request, not only ones touching skills: `check` is required to merge, so a
+  # change to the docs alone could never be merged while it didn't run.
   pull_request:
-    paths: ["skills/**", "tools/**", ".github/workflows/**"]
   push:
     branches: [main]
 
